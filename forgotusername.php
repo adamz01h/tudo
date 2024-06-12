@@ -9,13 +9,6 @@
         $username = $_POST['username'];
 
         include('includes/db_connect.php');
-    /*  $ret = pg_query($db, "select * from users where username='".$username."';");
-
-        if (pg_num_rows($ret) === 1) {
-            $success = true;
-        } else {
-            $error = true;
-        } */
     // Prepare the MySQLi statement to select the user
     $query = "SELECT * FROM users WHERE username = ?";
     $stmt = $db->prepare($query);
@@ -61,8 +54,8 @@
                 won't take you too long :(</p>
                 <input name="username" placeholder="Username"><br><br>
                 <input type="submit" value="Send Reset Token"> 
-                <?php if (isset($error)){echo "<span style='color:red'>User doesn't exist.</span>";}
-                else if (isset($success)){echo "<span style='color:green'>User exists!</span>";} ?>
+                <?php if (($error)){echo "<span style='color:red'>User doesn't exist.</span>";}
+                else if (($success)){echo "<span style='color:green'>User exists!</span>";} ?>
                 <br><br>
                 <?php include('includes/login_footer.php'); ?>
             </form>

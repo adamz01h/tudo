@@ -26,10 +26,11 @@
         $stmt = $db->prepare("SELECT * FROM users WHERE username = ?");
         if ($stmt === false) {
             die("Error preparing statement: " . $db->error);
-        }
+        }   
+        $username = $_POST['username'];
 
         // Bind the username parameter
-        $stmt->bind_param("s", $_POST['username']);
+        $stmt->bind_param("s", $username );
 
         // Execute the statement
         $stmt->execute();

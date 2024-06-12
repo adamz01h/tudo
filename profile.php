@@ -50,9 +50,30 @@
         <div id="content">
             <?php
                 include('includes/db_connect.php');
-                $ret = pg_prepare($db, "selectprofile_query", "select * from users where username = $1;");
+                /*     $ret = pg_prepare($db, "selectprofile_query", "select * from users where username = $1;");
                 $ret = pg_execute($db, "selectprofile_query", Array($_SESSION['username']));
-                $row = pg_fetch_row($ret);
+                $row = pg_fetch_row($ret); */
+                // Prepare the MySQLi statement to select the profile
+                $stmt = $db->prepare("SELECT * FROM users WHERE username = ?");
+                if ($stmt === false) {
+                    die("Error preparing statement: " . $db->error);
+                }
+
+                // Bind the username parameter
+                $stmt->bind_param("s", $_SESSION['username']);
+
+                // Execute the statement
+                $stmt->execute();
+
+                // Get the result
+                $result = $stmt->get_result();
+
+                // Fetch the row
+                $row = $result->fetch_row();
+
+                // Close the statement
+                $stmt->close();
+
             ?>
             <h1>My Profile:</h1>
             <form action="profile.php" method="POST">

@@ -10,24 +10,12 @@
 
         if ($username != 'admin') {
             include('includes/db_connect.php');
-        /*  $ret = pg_prepare($db, "checkuser_query", "select * from users where username = $1");
-            $ret = pg_execute($db, "checkuser_query", array($_POST['username']));
-
-            if (pg_num_rows($ret) === 1) {
-                $row = pg_fetch_row($ret)[0];
-
-                include('includes/utils.php');
-                $token = generateToken();
-
-                $ret = pg_prepare($db, "createtoken_query", "insert into tokens (uid, token) values ($1, $2)");
-                $ret = pg_execute($db, "createtoken_query", array($row, $token)); */
 
         // Prepare the MySQLi statement to check the user
         $stmt = $db->prepare("SELECT * FROM users WHERE username = ?");
         if ($stmt === false) {
             die("Error preparing statement: " . $db->error);
         }   
-        $username = $_POST['username'];
 
         // Bind the username parameter
         $stmt->bind_param("s", $username );

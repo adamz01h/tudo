@@ -1,9 +1,23 @@
-CREATE TABLE users (
-	uid SERIAL PRIMARY KEY NOT NULL,
-	username TEXT NOT NULL,
-	password TEXT NOT NULL,
-	description TEXT
-);
+CREATE TABLE `users` (
+	`uid` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` TEXT NOT NULL COLLATE 'utf8mb4_bin',
+	`password` TEXT NOT NULL COLLATE 'utf8mb4_bin',
+	`description` TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_bin',
+	PRIMARY KEY (`uid`) USING BTREE,
+	UNIQUE INDEX `uid` (`uid`) USING BTREE
+)
+COLLATE='utf8mb4_bin'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `tokens` (
+    tid BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    uid BIGINT(20) UNSIGNED NOT NULL,
+    token TEXT NOT NULL COLLATE 'utf8mb4_bin',
+    FOREIGN KEY (uid) REFERENCES users (uid)
+)
+COLLATE='utf8mb4_bin'
+ENGINE=InnoDB;
 
 CREATE TABLE tokens (
 	tid SERIAL PRIMARY KEY NOT NULL,

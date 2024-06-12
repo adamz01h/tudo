@@ -9,7 +9,7 @@
         $password = hash('sha256',$_POST['password']);
 
         include('includes/db_connect.php');
-        $ret = pg_prepare($db, "login_query", "select * from users where username = $1 and password = $2");
+    /*         $ret = pg_prepare($db, "login_query", "select * from users where username = $1 and password = $2");
         $ret = pg_execute($db, "login_query", array($_POST['username'], $password));
 
         if (pg_num_rows($ret) === 1) {
@@ -21,7 +21,42 @@
 
             header('location: /index.php');
             die();
+        } */
+
+
+    // Prepare the MySQLi statement to check login credentials
+    $stmt = $db->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
+    if ($stmt === false) {
+        die("Error preparing statement: " . $db->error);
+    }
+
+    // Bind the username and password parameters
+    $stmt->bind_param("ss", $_POST['username'], $password);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Get the result
+    $result = $stmt->get_result();
+
+    // Check if a row was returned
+    if ($result->num_rows === 1) {
+        // Start the session if not already started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
         }
+
+        $_SESSION['loggedin'] = true;
+        $_SESSION['username'] = $_POST['username'];
+
+        if ($_SESSION['username'] === 'admin') {
+            $_SESSION['isadmin'] = true;
+        }
+
+        // Redirect to the index page
+        header('Location: /index.php');
+        die();
+    }
         else {
             $error = true;
         }

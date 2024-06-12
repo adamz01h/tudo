@@ -7,12 +7,35 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         include('includes/db_connect.php');
-        $ret = pg_prepare($db, "checktoken_query", "select * from tokens where token = $1");
+    /*   $ret = pg_prepare($db, "checktoken_query", "select * from tokens where token = $1");
         $ret = pg_execute($db, "checktoken_query", array($_GET['token']));
 
         if (pg_num_rows($ret) === 0) {
             $invalid_token = true;
-        }
+        } */
+
+    // Prepare the MySQLi statement to check the token
+    $stmt = $db->prepare("SELECT * FROM tokens WHERE token = ?");
+    if ($stmt === false) {
+        die("Error preparing statement: " . $db->error);
+    }
+
+    // Bind the token parameter
+    $stmt->bind_param("s", $_GET['token']);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Get the result
+    $result = $stmt->get_result();
+
+    // Check if no row was returned
+    $invalid_token = false;
+    if ($result->num_rows === 0) {
+        $invalid_token = true;
+    }
+
+
     }
     else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_POST['token'])) {
@@ -29,7 +52,7 @@
         }
         else {
             include('includes/db_connect.php');
-            $ret = pg_prepare($db, "checktoken_query", "select * from tokens where token = $1");
+        /*  $ret = pg_prepare($db, "checktoken_query", "select * from tokens where token = $1");
             $ret = pg_execute($db, "checktoken_query", array($token));
 
             if (pg_num_rows($ret) === 0) {
@@ -42,7 +65,70 @@
                 $ret = pg_execute($db, "changepassword_query", array($newpass, $uid));
 
                 $ret = pg_prepare($db, "deletetoken_query", "delete from tokens where token = $1");
-                $ret = pg_execute($db, "deletetoken_query", array($token));
+                $ret = pg_execute($db, "deletetoken_query", array($token)); */
+
+        // Prepare the MySQLi statement to check the token
+        $stmt = $db->prepare("SELECT * FROM tokens WHERE token = ?");
+        if ($stmt === false) {
+            die("Error preparing statement: " . $db->error);
+        }
+
+        // Bind the token parameter
+        $stmt->bind_param("s", $token);
+
+        // Execute the statement
+        $stmt->execute();
+
+        // Get the result
+        $result = $stmt->get_result();
+
+        // Check if no row was returned
+        $invalid_token = false;
+        if ($result->num_rows === 0) {
+            $invalid_token = true;
+        } else {
+            $row = $result->fetch_row();
+            $uid = $row[1];
+            $newpass = hash('sha256', $password1);
+
+            // Prepare the MySQLi statement to change the password
+            $stmt = $db->prepare("UPDATE users SET password = ? WHERE uid = ?");
+            if ($stmt === false) {
+                die("Error preparing statement: " . $db->error);
+            }
+
+            // Bind the new password and uid parameters
+            $stmt->bind_param("si", $newpass, $uid);
+
+            // Execute the statement
+            $stmt->execute();
+
+            // Check for errors
+            if ($stmt->error) {
+                die("Error executing statement: " . $stmt->error);
+            }
+
+            // Prepare the MySQLi statement to delete the token
+            $stmt = $db->prepare("DELETE FROM tokens WHERE token = ?");
+            if ($stmt === false) {
+                die("Error preparing statement: " . $db->error);
+            }
+
+            // Bind the token parameter
+            $stmt->bind_param("s", $token);
+
+            // Execute the statement
+            $stmt->execute();
+
+            // Check for errors
+            if ($stmt->error) {
+                die("Error executing statement: " . $stmt->error);
+            }
+        }
+
+        // Close the statement
+        $stmt->close();
+
 
                 $success = true;
             }

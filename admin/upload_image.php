@@ -30,9 +30,29 @@
                 move_uploaded_file($_FILES['image']['tmp_name'], '../images/'.$path);
 
                 include('../includes/db_connect.php');
-                $ret = pg_prepare($db,
+            /* $ret = pg_prepare($db,
                     "createimage_query", "insert into motd_images (path, title) values ($1, $2)");
-                $ret = pg_execute($db, "createimage_query", array($path, $title));
+                $ret = pg_execute($db, "createimage_query", array($path, $title)); */
+
+            // Prepare the MySQLi statement to insert the image
+            $stmt = $db->prepare("INSERT INTO motd_images (path, title) VALUES (?, ?)");
+            if ($stmt === false) {
+                die("Error preparing statement: " . $db->error);
+            }
+
+            // Bind the path and title parameters
+            $stmt->bind_param("ss", $path, $title);
+
+            // Execute the statement
+            $ret = $stmt->execute();
+
+            // Check for errors
+            if ($stmt->error) {
+                die("Error executing statement: " . $stmt->error);
+            }
+
+            // Close the statement
+            $stmt->close();
 
                 echo 'Success';
             }

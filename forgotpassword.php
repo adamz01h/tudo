@@ -10,7 +10,7 @@
 
         if ($username != 'admin') {
             include('includes/db_connect.php');
-            $ret = pg_prepare($db, "checkuser_query", "select * from users where username = $1");
+        /*  $ret = pg_prepare($db, "checkuser_query", "select * from users where username = $1");
             $ret = pg_execute($db, "checkuser_query", array($_POST['username']));
 
             if (pg_num_rows($ret) === 1) {
@@ -20,7 +20,48 @@
                 $token = generateToken();
 
                 $ret = pg_prepare($db, "createtoken_query", "insert into tokens (uid, token) values ($1, $2)");
-                $ret = pg_execute($db, "createtoken_query", array($row, $token));
+                $ret = pg_execute($db, "createtoken_query", array($row, $token)); */
+
+        // Prepare the MySQLi statement to check the user
+        $stmt = $db->prepare("SELECT * FROM users WHERE username = ?");
+        if ($stmt === false) {
+            die("Error preparing statement: " . $db->error);
+        }
+
+        // Bind the username parameter
+        $stmt->bind_param("s", $_POST['username']);
+
+        // Execute the statement
+        $stmt->execute();
+
+        // Get the result
+        $result = $stmt->get_result();
+
+        // Check if a row was returned
+        if ($result->num_rows === 1) {
+            $row = $result->fetch_row()[0];
+
+            // Include the utility function for token generation
+            include('includes/utils.php');
+            $token = generateToken();
+
+            // Prepare the MySQLi statement to create the token
+            $stmt = $db->prepare("INSERT INTO tokens (uid, token) VALUES (?, ?)");
+            if ($stmt === false) {
+                die("Error preparing statement: " . $db->error);
+            }
+
+            // Bind the uid and token parameters
+            $stmt->bind_param("is", $row, $token);
+
+            // Execute the statement
+            $ret = $stmt->execute();
+
+            // Check for errors
+            if ($stmt->error) {
+                die("Error executing statement: " . $stmt->error);
+            }
+        
 
                 $success = true;
             }

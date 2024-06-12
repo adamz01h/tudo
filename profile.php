@@ -13,8 +13,28 @@
             $description = $_POST['description'];
             
             include('includes/db_connect.php');
-            $ret = pg_prepare($db, "updatedescription_query", "update users set description = $1 where username = $2");
-            $ret = pg_execute($db, "updatedescription_query", Array($description, $_SESSION['username']));
+        /*  $ret = pg_prepare($db, "updatedescription_query", "update users set description = $1 where username = $2");
+            $ret = pg_execute($db, "updatedescription_query", Array($description, $_SESSION['username'])); */
+
+        // Prepare the MySQLi statement to update the description
+        $stmt = $db->prepare("UPDATE users SET description = ? WHERE username = ?");
+        if ($stmt === false) {
+            die("Error preparing statement: " . $db->error);
+        }
+
+        // Bind the description and username parameters
+        $stmt->bind_param("ss", $description, $_SESSION['username']);
+
+        // Execute the statement
+        $ret = $stmt->execute();
+
+        // Check for errors
+        if ($stmt->error) {
+            die("Error executing statement: " . $stmt->error);
+        }
+
+
+
             $success = true;
         }
     }

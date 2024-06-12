@@ -1,14 +1,15 @@
 <?php
     if (!isset($db)) {
-        $host        = "host = 127.0.0.1";
-        $port        = "port = 5432";
-        $dbname      = "dbname = tudo";
-        $credentials = "user = postgres password = postgres";
+       $host        = "127.0.0.1";
+       $port        = "3306";
+       $dbname      = "tudo";
+       $username    = "tudo";
+       $password    = "tudo1@1!";
 
-        $db = pg_connect( "$host $port $dbname $credentials" );
+       $db = new mysqli("$host", "$username", "$password", "$dbname");
 
-        if (!$db) {
-            echo "Error: Unable to connect to db.";
-        }
+       if (!$db) {
+           echo "Error: Unable to connect to db.";
+       }
     }
 ?>

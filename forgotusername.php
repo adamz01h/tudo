@@ -9,13 +9,40 @@
         $username = $_POST['username'];
 
         include('includes/db_connect.php');
-        $ret = pg_query($db, "select * from users where username='".$username."';");
+    /*  $ret = pg_query($db, "select * from users where username='".$username."';");
 
         if (pg_num_rows($ret) === 1) {
             $success = true;
         } else {
             $error = true;
-        }
+        } */
+    // Prepare the MySQLi statement to select the user
+    $query = "SELECT * FROM users WHERE username = ?";
+    $stmt = $db->prepare($query);
+    if ($stmt === false) {
+        die("Error preparing statement: " . $db->error);
+    }
+
+    // Bind the username parameter
+    $stmt->bind_param("s", $username);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Get the result
+    $result = $stmt->get_result();
+
+    // Check if a row was returned
+    $success = false;
+    $error = false;
+    if ($result->num_rows === 1) {
+        $success = true;
+    } else {
+        $error = true;
+    }
+
+    // Close the statement
+    $stmt->close();
     }
 ?>
 

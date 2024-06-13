@@ -25,7 +25,6 @@
 
         // Get the result
         $result = $stmt->get_result();
-
         // Check if a row was returned
         if ($result->num_rows === 1) {
             $row = $result->fetch_row()[0];

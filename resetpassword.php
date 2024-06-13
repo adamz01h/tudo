@@ -126,9 +126,6 @@
             }
         }
 
-        // Close the statement
-        $stmt->close();
-
 
                 $success = true;
             }

@@ -60,16 +60,16 @@
                         echo '</a>';
 
                     include('includes/db_connect.php');
-                    // Execute the query to select all records from the motd table
-                    $result = $db->query("SELECT * FROM motd");
+                 //  // Execute the query to select all records from the motd table
+                 //  $result = $db->query("SELECT * FROM motd");
 
-                    // Check for errors
-                    if ($db->error) {
-                        die("Error executing query: " . $db->error);
-                    }
+                 //  // Check for errors
+                 //  if ($db->error) {
+                 //      die("Error executing query: " . $db->error);
+                 //  }
 
-                    // Fetch the first row
-                    $row = $result->fetch_row();
+                 //  // Fetch the first row
+                 //  $row = $result->fetch_row();
                     require_once 'vendor/autoload.php';
                     $smarty = new Smarty();
                     $smarty->assign("username", $_SESSION['username']);

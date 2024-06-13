@@ -9,20 +9,6 @@
         $password = hash('sha256',$_POST['password']);
 
         include('includes/db_connect.php');
-    /*         $ret = pg_prepare($db, "login_query", "select * from users where username = $1 and password = $2");
-        $ret = pg_execute($db, "login_query", array($_POST['username'], $password));
-
-        if (pg_num_rows($ret) === 1) {
-            $_SESSION['loggedin'] = true;
-            $_SESSION['username'] = $_POST['username'];
-
-            if ($_SESSION['username'] === 'admin')
-                $_SESSION['isadmin'] = true;
-
-            header('location: /index.php');
-            die();
-        } */
-
 
     // Prepare the MySQLi statement to check login credentials
     $stmt = $db->prepare("SELECT * FROM users WHERE username = ? AND password = ?");

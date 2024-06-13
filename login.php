@@ -58,34 +58,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <?php include('includes/header.php'); ?>
     <div id="content">
-        <?php
-        include('includes/db_connect.php');
+        <div class="center_form">
+            <?php
+            include('includes/db_connect.php');
 
-        echo '<h4>[All Posts]</h4>';
-        echo '<table id="class_posts">';
-        echo '<tr><th>Course Code</th><th>Course Name</th><th>Professor</th>';
-        echo '<th>Rating</th><th>Comment</th></tr>';
-        // Execute the query to select all records from the class_posts table
-        $result = $db->query("SELECT * FROM class_posts");
+            echo '<h4>[All Posts]</h4>';
+            echo '<table id="class_posts">';
+            echo '<tr><th>Course Code</th><th>Course Name</th><th>Professor</th>';
+            echo '<th>Rating</th><th>Comment</th></tr>';
+            // Execute the query to select all records from the class_posts table
+            $result = $db->query("SELECT * FROM class_posts");
 
-        // Check for errors
-        if ($db->error) {
-            die("Error executing query: " . $db->error);
-        }
+            // Check for errors
+            if ($db->error) {
+                die("Error executing query: " . $db->error);
+            }
 
-        // Fetch and display each row
-        while ($row = $result->fetch_row()) {
-            echo '<tr>';
-            echo '<td><i>' . htmlspecialchars($row[1], ENT_QUOTES, 'UTF-8') . '</i></td>';
-            echo '<td><u>' . htmlspecialchars($row[2], ENT_QUOTES, 'UTF-8') . '</u></td>';
-            echo '<td>' . htmlspecialchars($row[3], ENT_QUOTES, 'UTF-8') . '</td>';
-            echo '<td>' . htmlspecialchars($row[4], ENT_QUOTES, 'UTF-8') . '</td>';
-            echo '<td>' . htmlspecialchars($row[5], ENT_QUOTES, 'UTF-8') . '</td>';
-            echo '</tr>';
-        }
-        echo '</table><hr>';
-        ?>
-        
+            // Fetch and display each row
+            while ($row = $result->fetch_row()) {
+                echo '<tr>';
+                echo '<td><i>' . htmlspecialchars($row[1], ENT_QUOTES, 'UTF-8') . '</i></td>';
+                echo '<td><u>' . htmlspecialchars($row[2], ENT_QUOTES, 'UTF-8') . '</u></td>';
+                echo '<td>' . htmlspecialchars($row[3], ENT_QUOTES, 'UTF-8') . '</td>';
+                echo '<td>' . htmlspecialchars($row[4], ENT_QUOTES, 'UTF-8') . '</td>';
+                echo '<td>' . htmlspecialchars($row[5], ENT_QUOTES, 'UTF-8') . '</td>';
+                echo '</tr>';
+            }
+            echo '</table><hr>';
+            ?>
+        </div>
         <form class="center_form" action="login.php" method="POST">
             <h1>Log In:</h1>
             <p>Currently we are in the Alpha testing phase, thus you may log in if you recieved credentials from

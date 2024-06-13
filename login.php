@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo '<tr><th>Course Code</th><th>Course Name</th><th>Professor</th>';
             echo '<th>Rating</th><th>Comment</th></tr>';
             // Execute the query to select all records from the class_posts table
-            $result = $db->query("SELECT * FROM class_posts ORDER BY cid DESC LIMIT 2");
+            $result = $db->query("SELECT * FROM class_posts ORDER BY cid DESC LIMIT 5");
 
             // Check for errors
             if ($db->error) {

@@ -62,12 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php
             include('includes/db_connect.php');
 
-            echo '<h4>[All Posts]</h4>';
+            echo '<h4>Last Posts</h4>';
             echo '<table id="class_posts">';
             echo '<tr><th>Course Code</th><th>Course Name</th><th>Professor</th>';
             echo '<th>Rating</th><th>Comment</th></tr>';
             // Execute the query to select all records from the class_posts table
-            $result = $db->query("SELECT * FROM class_posts");
+            $result = $db->query("SELECT * FROM class_posts ORDER BY post_id DESC LIMIT 2");
 
             // Check for errors
             if ($db->error) {

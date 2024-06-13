@@ -34,7 +34,8 @@ CREATE TABLE class_posts (
 	name TEXT NOT NULL,
 	professor TEXT NOT NULL,
 	ects DECIMAL NOT NULL,
-	description TEXT NOT NULL
+	description TEXT NOT NULL,
+	create DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 );
 
 CREATE TABLE motd_images (

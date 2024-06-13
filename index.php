@@ -103,7 +103,7 @@ if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin'] == true) {
             echo '<h4>[All Posts]</h4>';
             echo '<table id="class_posts">';
             echo '<tr><th>Course Code</th><th>Course Name</th><th>Professor</th>';
-            echo '<th>Rating</th><th>Comment</th></tr>';
+            echo '<th>Rating</th><th>Comment</th><th>Date</th></tr>';
             // Execute the query to select all records from the class_posts table
             $result = $db->query("SELECT * FROM class_posts");
 
@@ -120,6 +120,7 @@ if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin'] == true) {
                 echo '<td>' . htmlspecialchars($row[3], ENT_QUOTES, 'UTF-8') . '</td>';
                 echo '<td>' . htmlspecialchars($row[4], ENT_QUOTES, 'UTF-8') . '</td>';
                 echo '<td>' . htmlspecialchars($row[5], ENT_QUOTES, 'UTF-8') . '</td>';
+                echo '<td>' . htmlspecialchars($row[6], ENT_QUOTES, 'UTF-8') . '</td>';
                 echo '</tr>';
             }
             echo '</table><hr>';

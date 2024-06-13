@@ -1,4 +1,6 @@
 <?php
+    $success = false;
+    $error = false;
     session_start();
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
         header('location: /index.php');
@@ -26,8 +28,7 @@
     $result = $stmt->get_result();
 
     // Check if a row was returned
-    $success = false;
-    $error = false;
+
     if ($result->num_rows === 1) {
         $success = true;
     } else {

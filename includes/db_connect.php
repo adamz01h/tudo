@@ -10,3 +10,4 @@
        if(!$db) {
            echo "Error: Unable to connect to db.";
        }
+    }

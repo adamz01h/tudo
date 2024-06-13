@@ -1,7 +1,7 @@
 <?php
+    session_start();
     $success = false;
     $error = false;
-    session_start();
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
         header('location: /index.php');
         die();
